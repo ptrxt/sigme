@@ -10,5 +10,14 @@ int main() {
    signal_manager_register_source(source);
    signal_manager_register_receiver(receiver);
    ...
+   while(1) {
+      signal_manager_run();
+      delay(1000);
+   }
 }
 ```
+During registration, signal manager queries, through the SignalReceiver interface, receivers for the signal types they want to subscribe on.
+## Signals
+The signal sources produces **signals**. A signal is a chunk of dynamically allocated memory created by calling signal_new(). This function actually allocates two chunks of memory. The first is a control block used for signal lifetime management. The second block is the signal payload seen by the client application. 
+![signal](/doc/signal.png)
+The size and format of the signal payload is not known by the framework. During signal creation, signal_new() will make a call to a create() callback supplied by the application for that signal type. In the create() function, the application should allocate and populate a memory block for the payload.
