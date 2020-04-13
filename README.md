@@ -9,5 +9,6 @@ int main() {
    SignalReceiver *receiver = display_unit_init();
    signal_manager_register_source(source);
    signal_manager_register_receiver(receiver);
+   ...
 }
 ```
