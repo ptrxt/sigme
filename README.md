@@ -24,4 +24,4 @@ The signal sources produces **signals**. A signal is a chunk of dynamically allo
 The size and format of the signal payload is not known by the framework. During signal creation, signal_new() will make a call to a create() callback supplied by the application for that signal type. In the create() function, the application should allocate and populate a memory block for the payload.
 
 ### Signal registration
-Like receivers and sources, the used signal types must be registered at startup. This ties a **SignalType** identifier to an instance of **SignalTypeDetails** interface. So when an signal source creates a new signal with signal_new(type, data), the framework knows which interface to call for allocation of the signal payload part.
+Like receivers and sources, the used signal types must be registered at startup. This ties a **SignalType** identifier to an instance of **SignalTypeDetails** interface. So when an signal source creates a new signal with signal_new(type, data), the framework knows which interface to call for allocation of the signal payload part. At the same time, the application is given full control over its signal types.
