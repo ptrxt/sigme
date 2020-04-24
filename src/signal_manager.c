@@ -46,12 +46,14 @@ static void send_to_receivers(Signal* signal) {
 static void pollSources(void) {
     for (int i = 0; i<MAX_N_SOURCES && manager.sources[i] != 0; i++) {
         Signal *signal = manager.sources[i]->poll();
-        time_t t;
-        time(&t);
-        printf("---------------------------\n%ssignal manager:\t\treceive signal type %d ..\n",ctime(&t), signal_type(signal));
-        signal_lock(signal);
-        send_to_receivers(signal);
-        signal_unlock(signal);
+        if (NULL != signal) {
+            time_t t;
+            time(&t);
+            printf("---------------------------\n%ssignal manager:\t\treceive signal type %d ..\n",ctime(&t), signal_type(signal));
+            signal_lock(signal);
+            send_to_receivers(signal);
+            signal_unlock(signal);
+        }
     }
 }
 

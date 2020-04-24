@@ -14,6 +14,11 @@
  * free the allocated memory when signal processing is done.
  */
 typedef struct {
+    /**
+     * Poll source for new signal
+     *
+     * @return Pointer to new signal or NULL if no signal to be delivered
+     */
     Signal* (*poll)();
 } SignalSource;
 
