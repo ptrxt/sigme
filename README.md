@@ -20,10 +20,8 @@ During registration, signal manager queries, through the SignalReceiver interfac
 ## Signals
 The signal sources produces **signals**. A signal is a chunk of dynamically allocated memory created by calling signal_new(). This function actually allocates two chunks of memory. The first is a control block used for signal lifetime management. The second block is the signal payload seen by the client application. 
 <p align="center">
-  <img width="460" height="300" src="/doc/signal2.png">
+  <img src="/doc/signal2.png">
 </p>
-
-                                                 ![signal](/doc/signal2.png)
 
 The size and format of the signal payload is not known by the framework. During signal creation, signal_new() will make a call to a create() callback supplied by the application for that signal type. In the create() function, the application should allocate and populate a memory block for the payload.
 
