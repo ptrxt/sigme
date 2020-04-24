@@ -23,7 +23,7 @@ The signal sources produces **signals**. A signal is a chunk of dynamically allo
   <img src="/doc/signal2.png">
 </p>
 
-The size and format of the signal payload is not known by the framework, so during signal creation, signal_new() will make a callout to a create() function supplied by the application for that signal type. In this, the application should allocate and populate a memory block for the payload.
+The size and format of the signal payload is not known by the framework, so during signal creation, signal_new() will make a callout to a *create()* function supplied by the application. In this function, the client code should allocate and populate a memory block for the payload.
 Since each SignalType payload may be different from the others, there must be one *create* function for each SignalType. This is handled by registration of a SignalTypeDetails structure for each SignalType.
 
 ### Signal registration
