@@ -33,4 +33,23 @@ Like receivers and sources, the used signal types must be registered at startup.
 
 
 ### Sending signals
-Signals are not actually sent, they are delivered when the signal manager in the framework polls the sources for signals. The signal manager calls the *poll()* function in the **SignalSource** interface for each registered signal source. 
+To send a signal, the application creates a new signal in the *poll()* function. If the source don't have anything to send, it just returns NULL. 
+```
+temp_sensor.c:
+
+static SignalSource tempSource;
+
+static Signal* pollTempSensor() {
+    TempSignal ts;
+    ts.id = 0;
+    ts.value = 23;
+    return signal_new(kTempSignal, &ts);
+}
+
+SignalSource *temp_sensor_init(void) {
+    tempSource.poll = pollTempSensor;
+    return &tempSource;
+}
+```
+
+
