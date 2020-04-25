@@ -1,5 +1,6 @@
 #include "signal.h"
 #include "signal_type.h"
+#include "app_signals.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
@@ -8,14 +9,14 @@
 static SignalTypeDetails humidSignal;
 
 
-static void* createHumidSignal(void* data) {
-    uint32_t* d = (uint32_t*)malloc(sizeof(uint32_t));
-    *d = *(uint32_t*)data;
-    return d;
-}
+//static void* createHumidSignal(void* data) {
+//    uint32_t* d = (uint32_t*)malloc(sizeof(uint32_t));
+//    *d = *(uint32_t*)data;
+//    return d;
+//}
 
 static int humidSignalLength(Signal* signal) {
-    return 4;
+    return sizeof(HumiditySignal);
 }
 
 static const char* humidName(void) {
@@ -28,7 +29,7 @@ static void logError(SignalType type) {
 
 void install_signals(void) {
     humidSignal.type = kHumiditySignal;
-    humidSignal.create = createHumidSignal;
+    //humidSignal.create = createHumidSignal;
     humidSignal.length = humidSignalLength;
     humidSignal.name = humidName;
     if (1 == signal_type_register(&humidSignal)) {

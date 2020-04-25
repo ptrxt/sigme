@@ -23,27 +23,26 @@ The signal sources produces **signals**. A signal is a chunk of dynamically allo
   <img src="/doc/signal2.png">
 </p>
 
-The size and format of the signal payload is not known by the framework, so during signal creation, *signal_new()* will make a callout to a *create()* function supplied by the application. In this function, the client code should allocate and populate a memory block for the payload.
-Since each **SignalType** payload may be different from the others, there must be one *create* function for each **SignalType**. This is handled by registration of a **SignalTypeDetails** structure for each SignalType.
+The memory block for the signal payload, is allocated by the application and passed as a pointer to the *signal_new()* call. 
 
 ### Signal registration
-Like receivers and sources, the used signal types must be registered at startup. This ties a **SignalType** identifier to an instance of **SignalTypeDetails** interface, which includes a *create()* function for creation of the signal. So when a signal source creates a new signal with *signal_new(type, data)*, the framework knows which interface to call for allocation of the payload part of the signal. This gives the application full control over its signal types.
+Like receivers and sources, the used signal types must be registered at startup. This ties a **SignalType** identifier to an instance of **SignalTypeDetails** interface.
 
 ![signal_registration](/doc/signal_registration.png)
 
 
 ### Sending signals
-To send a signal, the application creates a new signal in the *poll()* function. If the source don't have anything to send, it just returns NULL. 
+To send a signal, the application allocates memory for holding the desired signal type, populates it and passes it to *signal_new()* which will allocate a new signal and attach the creates a new signal in the *poll()* function. If the source don't have anything to send, it just returns NULL. 
 ```
 temp_sensor.c:
 
 static SignalSource tempSource;
 
 static Signal* pollTempSensor() {
-    TempSignal ts;
-    ts.id = 0;
-    ts.value = 23;
-    return signal_new(kTempSignal, &ts);
+    TempSignal* ts = (TempSignal*)malloc(sizeof(TempSignal));
+    ts->id = 0;
+    ts->value = 23;
+    return signal_new(kTempSignal, ts);
 }
 
 SignalSource *temp_sensor_init(void) {

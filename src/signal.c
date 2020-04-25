@@ -38,7 +38,7 @@ Signal* signal_new(SignalType type, void* data) {
     signal->ctrl.ref_cnt = 0;
     g_mutex_init (&signal->ctrl.mutex);
     signal->type = type;
-    signal->data = signalTypes[type]->create(data);
+    signal->data = data;
     return signal;
 }
 
@@ -58,7 +58,9 @@ static int unref_and_free(Signal* signal) {
     if (--signal->ctrl.ref_cnt == 0) {
         // No more references - delete signal
         printf("free signal %s\n", signalTypes[signal->type]->name());
-        free(signal->data);
+        if (signal->data != NULL) {
+            free(signal->data);
+        }
         free(signal);
         return 0;
     }

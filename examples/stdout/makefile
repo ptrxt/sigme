@@ -15,6 +15,7 @@ signal.c
 
 INCLUDES = \
 -I. \
+-I../signals \
 -I../receivers \
 -I../sources \
 -I../../inc \

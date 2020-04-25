@@ -19,19 +19,6 @@ typedef struct {
     SignalType type;
 
     /**
-     * Create new signal payload
-     *
-     * This function is called by the framework in the signal_new() function in
-     * order to add the application specific signal type payload to the new signal.
-     * Should allocate memory for the payload. The framework is responsible for
-     * de-allocating the memory.
-     *
-     * @param data, data for creating the application signal payload
-     * @return, pointer to the allocated memory holding the signal payload
-     */
-    void* (*create)(void* data);
-
-    /**
      * Returns length in bytes of the signal payload
      */
     int (*length)(Signal* signal);
