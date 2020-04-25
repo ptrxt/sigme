@@ -49,5 +49,15 @@ SignalSource *temp_sensor_init(void) {
     return &tempSource;
 }
 ```
+The new signal will be delivered to receivers of that signal type. Eventually the framework will free the memory associated with the signal. 
+
+### Receiving signals
+Signals are delivered to signal receivers through the *receive()* function. When the signal is delivered, the signal manager holds a mutex lock on the signal. Thus, the *receive()* function is executed in signal manager context which holds a lock on the signal. The receiver can either do the signal processing immediately or put it on queue for later processing.
+
+#### Signal reference counting
+When a signal is delivered to a receiver, a reference counter is incremented for the signal. When the receiver is done with signal processing and has no further interest in the signal, it should call *signal_unref()* to decrement the reference count. 
+When the reference count reaches 0, the memory allocated for the signal is freed.
+
+#### Signal mutex
 
 
