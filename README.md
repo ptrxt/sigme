@@ -27,7 +27,7 @@ The signal sources produces **signals**. A signal is a chunk of dynamically allo
 ### Signal registration
 Like receivers and sources, the used signal types must be registered at startup. This ties a **SignalType** identifier to an instance of **SignalTypeDetails** interface.
 
-![signal_registration](/doc/signal_registration.png)
+![signal_registration](/doc/signal_registration2.png)
 
 
 ### Sending signals
