@@ -18,12 +18,11 @@ int main() {
 ```
 During registration, signal manager queries, through the SignalReceiver interface, receivers for the signal types they want to subscribe on.
 ## Signals
-The signal sources produces **signals**. A signal is a chunk of dynamically allocated memory created by calling *signal_new()*. This function actually leads to allocation of two blocks of memory. The first block is a control block used for signal lifetime management. The second block is the signal payload seen by the client application. 
+The signal sources produces **signals**. A signal is a chunk of dynamically allocated memory created by calling *signal_new()*. This memory block is a control block used for signal lifetime management. It also contains a pointer to another, by the application, dynamically allocated memory block: the application signal payload. It is created by the signal source and passed as a pointer to the call to *signal_new()*.
+
 <p align="center">
   <img src="/doc/signal2.png">
 </p>
-
-The memory block for the signal payload, is allocated by the application and passed as a pointer to the *signal_new()* call. 
 
 ### Signal registration
 Like receivers and sources, the used signal types must be registered at startup. This ties a **SignalType** identifier to an instance of **SignalTypeDetails** interface.
@@ -32,7 +31,7 @@ Like receivers and sources, the used signal types must be registered at startup.
 
 
 ### Sending signals
-To send a signal, the application allocates memory for holding the desired signal type, populates it and passes it to *signal_new()* which will allocate a new signal and attach the creates a new signal in the *poll()* function. If the source don't have anything to send, it just returns NULL. 
+To send a signal, the application should allocate memory for holding the desired application signal type, populate it and pass it to *signal_new()* which will allocate a control block for the signal. The return value from *signal_new()* is a pointer to a new signal, which should be delivered to the framework when it polls the source. If the source don't have anything to send, it just returns NULL in the *poll()* call.
 ```
 temp_sensor.c:
 
