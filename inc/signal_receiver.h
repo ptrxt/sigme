@@ -3,6 +3,10 @@
 
 #include "signal.h"
 
+typedef enum {
+    PROCESSING_DONE,
+    PROCESSING_PENDING
+} ReceiveReturn;
 
 /**
  * SignalReceiver interface
@@ -22,8 +26,11 @@ typedef struct {
      * queue to be handled by another thread, that thread must acquire the lock
      * by calling signal_lock() before processing the signal to be sure signal
      * manager thread has released the signal.
+     *
+     * @return PROCESSING_DONE if signal processing was done in the receive call
+     * @return PROCESSING_PENDING is signal processing is deferred to be done later
      */
-    void (*receive)(Signal* signal);
+    ReceiveReturn (*receive)(Signal* signal);
 
     /**
      * Request signals to be subscribed

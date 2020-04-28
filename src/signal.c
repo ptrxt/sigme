@@ -1,4 +1,5 @@
 #include "signal.h"
+#include "signal_priv.h"
 #include "signal_type.h"
 #include <stdlib.h>
 #include <stdint.h>
@@ -88,4 +89,8 @@ void *signal_data(Signal* signal) {
 
 const char* signal_name(Signal* signal) {
     return signalTypes[signal->type]->name();
+}
+
+uint32_t signal_refcount(Signal* signal) {
+    return signal->ctrl.ref_cnt;
 }

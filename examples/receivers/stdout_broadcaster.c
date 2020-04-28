@@ -12,8 +12,9 @@ typedef struct {
 
 static StdoutBroadcaster receiver;
 
-static void pushSignal(Signal *signal) {
+static ReceiveReturn pushSignal(Signal *signal) {
     g_async_queue_push(receiver.queue, signal);
+    return PROCESSING_PENDING;
 }
 
 static void get_signals(SignalType signals[], unsigned max, unsigned *len) {

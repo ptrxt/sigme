@@ -1,5 +1,6 @@
 #include "signal_manager.h"
 #include "signal.h"
+#include "signal_priv.h"
 #include <glib.h>
 #include <stdio.h>
 #include <time.h>
@@ -38,8 +39,11 @@ static void send_to_receivers(Signal* signal) {
     SignalReceiver **receiver = &manager.sigTypeToReceiver[signal_type(signal)][0];
     for (int j = 0; j < MAX_N_RECEIVERS && *receiver != 0; j++, receiver++) {
         printf("signal manager:\t\tforward to %s\n", (*receiver)->name());
-        signal_ref(signal);
-        (*receiver)->receive(signal);
+
+        ReceiveReturn result = (*receiver)->receive(signal);
+        if (result == PROCESSING_PENDING) {
+            signal_ref(signal);
+        }
     }
 }
 
@@ -51,13 +55,12 @@ static void pollSources(void) {
             time(&t);
             printf("---------------------------\n%ssignal manager:\t\treceive signal type %d ..\n",ctime(&t), signal_type(signal));
             signal_lock(signal);
+            signal_ref(signal);
             send_to_receivers(signal);
-            signal_unlock(signal);
+            signal_unref(signal);
         }
     }
 }
-
-
 
 void signal_manager_register_source(SignalSource *source) {
     if (manager.init == SIGNAL_MANAGER_NOT_INITIALISED) {
