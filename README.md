@@ -52,12 +52,13 @@ SignalSource *temp_sensor_init(void) {
 The new signal will be delivered to receivers of that signal type. Eventually the framework will free the memory associated with the signal. 
 
 ### Receiving signals
-Signals are delivered to signal receivers through the *receive()* function. When the signal is delivered, the signal manager holds a mutex lock on the signal. Thus, the *receive()* function is executed in signal manager context which holds a lock on the signal. The receiver can either do the signal processing immediately or put it on queue for later processing.
+Signals are delivered to signal receivers through the *receive()* function. The receiver has two options:
+ - extract the signal payload and use it now or later and return **PROCESSING_DONE** to indicate it has no further interest in keeping the signal memory allocated.
+ - save the signal pointer for later processing and return **PROCESSING_PENDING** to indicate the signal should not be de-allocated yet.
 
 #### Signal reference counting
-When a signal is delivered to a receiver, a reference counter is incremented for the signal. When the receiver is done with signal processing and has no further interest in the signal, it should call *signal_unref()* to decrement the reference count. 
-When the reference count reaches 0, the memory allocated for the signal is freed.
+When a receiver returns **PROCESS_PENDING** to the *receive()* call, a reference counter is incremented for the signal. As long as the counter is > 0, the signal will not be de-allocated. Later when the receiving application has finished processing the signal and has no further interest in it, it should call *signal_unref()* to decrement the counter. When the reference count reaches 0, the memory allocated for the signal is freed by the framework.
 
 #### Signal mutex
-
+When signal processing is performed later outside the *receive()* call, the application must lock the signal mutex before using the signal pointer. This is done by calling *signal_lock()* which is a blocking call. Once the thread gets the lock, it is resumed and can start using the signal. When signal processing is done, and if the thread does not need access to the signal pointer anymore, it should call *signal_unref()* to decrement the reference count. Otherwise, if the thread still wants to keep its reference to the signal, it should call *signal_unlock()* to relese the signal mutex. 
 
