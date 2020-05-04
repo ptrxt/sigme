@@ -1,5 +1,12 @@
 # sigme
-sigme is a simple framework for distributing signals between modules in an (threaded) client application. At its core, there is a **signal manager** polling signal sources for new signals and forwards them to the signal receivers. A signal source is part of the client application and implements the **SignalSource** interface. A signal receiver is also part of the client application and implements the **SignalReceiver** interface. 
+sigme is a simple framework for distributing signals between modules in an (threaded) client application. 
+
+## Dependencies
+sigme requires GLib: https://developer.gnome.org/about/
+When compiling, link to the following libs: pthread, gthread-2.0, gio-2.0, gobject-2.0, glib-2.0.
+
+## Overview
+At its core, there is a **signal manager** polling signal sources for new signals and forwards them to the signal receivers. A signal source is part of the client application and implements the **SignalSource** interface. A signal receiver is also part of the client application and implements the **SignalReceiver** interface. 
 ![overview](/doc/overview.png)
 
 At application start up, sources and receivers should register with the signal manager:
@@ -57,8 +64,8 @@ Signals are delivered to signal receivers through the *receive()* function. The 
  - save the signal pointer for later processing and return **PROCESSING_PENDING** to indicate the signal should not be de-allocated yet.
 
 #### Signal reference counting
-When a receiver returns **PROCESS_PENDING** to the *receive()* call, a reference counter is incremented for the signal. As long as the counter is > 0, the signal will not be de-allocated. Later when the receiving application has finished processing the signal and has no further interest in it, it should call *signal_unref()* to decrement the counter. When the reference count reaches 0, the memory allocated for the signal is freed by the framework.
+When a receiver returns **PROCESS_PENDING** to the *receive()* call, a reference counter is incremented for the signal. As long as the counter is > 0, the signal will not be de-allocated. Later when the receiver has finished processing the signal and has no further interest in it, it should call *signal_unref()* to decrement the counter. When the reference count reaches 0, the memory allocated for the signal is freed by the framework.
 
 #### Signal mutex
-When signal processing is performed later outside the *receive()* call, the application must lock the signal mutex before using the signal pointer. This is done by calling *signal_lock()* which is a blocking call. Once the thread gets the lock, it is resumed and can start using the signal. When signal processing is done, and if the thread does not need access to the signal pointer anymore, it should call *signal_unref()* to decrement the reference count. Otherwise, if the thread still wants to keep its reference to the signal, it should call *signal_unlock()* to relese the signal mutex. 
+When signal processing is performed later outside the *receive()* call, the application must lock the signal mutex before using the signal pointer. This is done by calling *signal_lock()* which is a blocking call. Once the thread gets the lock, it is resumed and can begin using the signal. When signal processing is done, and if the thread does not need access to the signal pointer anymore, it should call *signal_unref()* to decrement the reference count. Otherwise, if the thread still wants to keep its reference to the signal, it should call *signal_unlock()* to relese the signal mutex. 
 
