@@ -1,4 +1,4 @@
-#include "sgm_manager.h"
+#include "sgm.h"
 #include "sgm_signal.h"
 #include "sgm_signal_priv.h"
 #include <glib.h>
@@ -62,7 +62,7 @@ static void pollSources(void) {
     }
 }
 
-void sgm_manager_register_source(SignalSource *source) {
+void sgm_add_source(SignalSource *source) {
     if (manager.init == SIGNAL_MANAGER_NOT_INITIALISED) {
         init();
     }
@@ -74,7 +74,7 @@ void sgm_manager_register_source(SignalSource *source) {
     }
 }
 
-void sgm_manager_register_receiver(SignalReceiver *receiver) {
+void sgm_add_receiver(SignalReceiver *receiver) {
     if (manager.init == SIGNAL_MANAGER_NOT_INITIALISED) {
         init();
     }
@@ -92,7 +92,7 @@ void sgm_manager_register_receiver(SignalReceiver *receiver) {
     }
 }
 
-void sgm_manager_run(void) {
+void sgm_run(void) {
     if (manager.init == SIGNAL_MANAGER_NOT_INITIALISED) {
         init();
     }

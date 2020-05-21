@@ -72,10 +72,6 @@ SignalType sgm_signal_type(Signal* signal);
  */
 void *sgm_signal_data(Signal* signal);
 
-/**
- * Get signal name
- */
-const char* sgm_signal_name(Signal* signal);
 
 
 #endif /* _SIGNAL_H_ */

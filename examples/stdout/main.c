@@ -17,7 +17,7 @@
  */
 
 #include "sgm_signal.h"
-#include "sgm_manager.h"
+#include "sgm.h"
 #include "humid.h"
 #include "stdout_broadcaster.h"
 #include <glib.h>
@@ -28,7 +28,7 @@
 void install_signals(void);
 
 static gboolean timer_callback(void* data) {
-    sgm_manager_run();
+    sgm_run();
     return G_SOURCE_CONTINUE;
 }
 
@@ -47,8 +47,8 @@ int main(void) {
     setup_timer(context);
 
     install_signals();
-    sgm_manager_register_source(humid_init());
-    sgm_manager_register_receiver(stdout_broadcaster_init(&t));
+    sgm_add_source(humid_init());
+    sgm_add_receiver(stdout_broadcaster_init(&t));
 
     g_main_loop_run (loop);
     g_thread_join(t);

@@ -10,7 +10,7 @@ main.c \
 install_signals.c \
 humid.c \
 stdout_broadcaster.c \
-sgm_manager.c \
+sgm.c \
 sgm_signal.c 
 
 INCLUDES = \
