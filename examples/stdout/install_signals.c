@@ -1,5 +1,5 @@
-#include "signal.h"
-#include "signal_type.h"
+#include "sgm_signal.h"
+#include "sgm_type.h"
 #include "app_signals.h"
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +32,7 @@ void install_signals(void) {
     //humidSignal.create = createHumidSignal;
     humidSignal.length = humidSignalLength;
     humidSignal.name = humidName;
-    if (1 == signal_type_register(&humidSignal)) {
+    if (1 == sgm_signal_type_register(&humidSignal)) {
         logError(kHumiditySignal);
     }
 }

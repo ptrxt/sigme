@@ -1,5 +1,5 @@
 #include "stdout_broadcaster.h"
-#include "signal.h"
+#include "sgm_signal.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <glib.h>
@@ -32,14 +32,14 @@ static gpointer printThread(gpointer data) {
 
     while(1) {
         Signal* signal = (Signal*)g_async_queue_pop(receiver->queue);
-        signal_lock(signal);
-        switch (signal_type(signal)) {
+        sgm_signal_lock(signal);
+        switch (sgm_signal_type(signal)) {
             case kTempSignal:
-                printf("stdout_broadcaster:\treceived %s\n", (char*)signal_data(signal));
+                printf("stdout_broadcaster:\treceived %s\n", (char*)sgm_signal_data(signal));
                 break;
 
             case kHumiditySignal:
-                printf("stdout_broadcaster:\treceived %d\n", *(uint32_t*)signal_data(signal));
+                printf("stdout_broadcaster:\treceived %d\n", *(uint32_t*)sgm_signal_data(signal));
                 break;
 
             default:
@@ -47,7 +47,7 @@ static gpointer printThread(gpointer data) {
                 break;
         }
 
-        signal_unref(signal);
+        sgm_signal_unref(signal);
     }
 
     return 0;

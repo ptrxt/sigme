@@ -1,7 +1,7 @@
 #ifndef _STDOUT_BROADCASTER_H_
 #define _STDOUT_BROADCASTER_H_
 
-#include "signal_receiver.h"
+#include "sgm_receiver.h"
 #include <glib.h>
 
 SignalReceiver* stdout_broadcaster_init(GThread **thread);

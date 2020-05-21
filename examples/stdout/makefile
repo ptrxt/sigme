@@ -10,8 +10,8 @@ main.c \
 install_signals.c \
 humid.c \
 stdout_broadcaster.c \
-signal_manager.c \
-signal.c 
+sgm_manager.c \
+sgm_signal.c 
 
 INCLUDES = \
 -I. \

@@ -1,7 +1,7 @@
-#ifndef _SIGNAL_TYPE_H_
-#define _SIGNAL_TYPE_H_
+#ifndef _SGM_TYPE_H_
+#define _SGM_TYPE_H_
 
-#include "signal.h"
+#include "sgm_signal.h"
 
 
 /**
@@ -37,7 +37,7 @@ typedef struct {
  *
  * @param signalTypeDetails, instantiation of the struct for the new signal type
  */
-int signal_type_register(SignalTypeDetails* signalTypeDetails);
+int sgm_signal_type_register(SignalTypeDetails* signalTypeDetails);
 
 
-#endif /* _SIGNAL_TYPE_H_ */
+#endif /* _SGM_TYPE_H_ */

@@ -1,6 +1,6 @@
-#include "signal_manager.h"
-#include "signal.h"
-#include "signal_priv.h"
+#include "sgm_manager.h"
+#include "sgm_signal.h"
+#include "sgm_signal_priv.h"
 #include <glib.h>
 #include <stdio.h>
 #include <time.h>
@@ -36,13 +36,13 @@ static void init() {
 }
 
 static void send_to_receivers(Signal* signal) {
-    SignalReceiver **receiver = &manager.sigTypeToReceiver[signal_type(signal)][0];
+    SignalReceiver **receiver = &manager.sigTypeToReceiver[sgm_signal_type(signal)][0];
     for (int j = 0; j < MAX_N_RECEIVERS && *receiver != 0; j++, receiver++) {
         printf("signal manager:\t\tforward to %s\n", (*receiver)->name());
 
         ReceiveReturn result = (*receiver)->receive(signal);
         if (result == PROCESSING_PENDING) {
-            signal_ref(signal);
+            sgm_signal_ref(signal);
         }
     }
 }
@@ -53,16 +53,16 @@ static void pollSources(void) {
         if (NULL != signal) {
             time_t t;
             time(&t);
-            printf("---------------------------\n%ssignal manager:\t\treceive signal type %d ..\n",ctime(&t), signal_type(signal));
-            signal_lock(signal);
-            signal_ref(signal);
+            printf("---------------------------\n%ssignal manager:\t\treceive signal type %d ..\n",ctime(&t), sgm_signal_type(signal));
+            sgm_signal_lock(signal);
+            sgm_signal_ref(signal);
             send_to_receivers(signal);
-            signal_unref(signal);
+            sgm_signal_unref(signal);
         }
     }
 }
 
-void signal_manager_register_source(SignalSource *source) {
+void sgm_manager_register_source(SignalSource *source) {
     if (manager.init == SIGNAL_MANAGER_NOT_INITIALISED) {
         init();
     }
@@ -74,7 +74,7 @@ void signal_manager_register_source(SignalSource *source) {
     }
 }
 
-void signal_manager_register_receiver(SignalReceiver *receiver) {
+void sgm_manager_register_receiver(SignalReceiver *receiver) {
     if (manager.init == SIGNAL_MANAGER_NOT_INITIALISED) {
         init();
     }
@@ -92,7 +92,7 @@ void signal_manager_register_receiver(SignalReceiver *receiver) {
     }
 }
 
-void signal_manager_run(void) {
+void sgm_manager_run(void) {
     if (manager.init == SIGNAL_MANAGER_NOT_INITIALISED) {
         init();
     }

@@ -1,7 +1,7 @@
-#ifndef _SIGNAL_PRIV_H_
-#define _SIGNAL_PRIV_H_
+#ifndef _SGM_SIGNAL_PRIV_H_
+#define _SGM_SIGNAL_PRIV_H_
 
-#include "signal.h"
+#include "sgm_signal.h"
 #include <stdint.h>
 
 /**
@@ -15,7 +15,7 @@
  *
  * @param signal
  */
-void signal_ref(Signal* signal);
-uint32_t signal_refcount(Signal* signal);
+void sgm_signal_ref(Signal* signal);
+uint32_t sgm_signal_refcount(Signal* signal);
 
-#endif /* _SIGNAL_PRIV_H_ */
+#endif /* _SGM_SIGNAL_PRIV_H_ */

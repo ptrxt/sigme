@@ -1,7 +1,7 @@
-#ifndef _SIGNAL_RECEIVER_H_
-#define _SIGNAL_RECEIVER_H_
+#ifndef _SGM_RECEIVER_H_
+#define _SGM_RECEIVER_H_
 
-#include "signal.h"
+#include "sgm_signal.h"
 
 typedef enum {
     PROCESSING_DONE,
@@ -51,4 +51,4 @@ typedef struct {
 } SignalReceiver;
 
 
-#endif /* _SIGNAL_RECEIVER_H_ */
+#endif /* _SGM_RECEIVER_H_ */

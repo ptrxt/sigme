@@ -1,6 +1,6 @@
 #include "humid.h"
-#include "signal_source.h"
-#include "signal.h"
+#include "sgm_source.h"
+#include "sgm_signal.h"
 #include "app_signals.h"
 #include <stdio.h>
 #include <stdint.h>
@@ -22,7 +22,7 @@ static Signal* fetchHumidity() {
     h->humidity = humidSensorRead();
     h->id = humidSensorId();
     printf("new signal humidity\n");
-    return signal_new(kHumiditySignal, h);
+    return sgm_signal_new(kHumiditySignal, h);
 }
 
 SignalSource *humid_init(void) {

@@ -1,7 +1,7 @@
-#ifndef _SIGNAL_SOURCE_H_
-#define _SIGNAL_SOURCE_H_
+#ifndef _SGM_SOURCE_H_
+#define _SGM_SOURCE_H_
 
-#include "signal.h"
+#include "sgm_signal.h"
 
 
 /**
@@ -22,4 +22,4 @@ typedef struct {
     Signal* (*poll)();
 } SignalSource;
 
-#endif /* _SIGNAL_SOURCE_H_ */
+#endif /* _SGM_SOURCE_H_ */
