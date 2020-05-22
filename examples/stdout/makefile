@@ -7,7 +7,6 @@ SRCDIRS =\
 
 SRC= \
 main.c \
-install_signals.c \
 humid.c \
 stdout_broadcaster.c \
 sgm.c \

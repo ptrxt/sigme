@@ -6,7 +6,6 @@
 #include "sgm_receiver.h"
 #include "sgm_source.h"
 
-int sgm_add_signal(SignalType type, int (*length)(Signal*));
 void sgm_add_source(SignalSource *source);
 void sgm_add_receiver(SignalReceiver *receiver);
 void sgm_run(void);

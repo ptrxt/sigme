@@ -13,29 +13,10 @@ typedef struct SignalCtrl_t {
 struct Signal_t {
     SignalCtrl ctrl;
     SignalType type;
-    void *data;
+    SignalPayload data;
 };
 
-typedef struct {
-    SignalType type;
-    int (*length)(Signal* signal);
-} SignalTypeDetails;
-
-static SignalTypeDetails signalTypes[kMaxSigType] = {0};
-
-int sgm_add_signal(SignalType type, int (*length)(Signal*)) {
-    if (signalTypes[type].type != type) {
-        signalTypes[type].type = type;
-        signalTypes[type].length = length;
-        return 0;
-    }
-    return 1;
-}
-Signal* sgm_signal_new(SignalType type, void* data) {
-    // Check first that the signal type is registered
-    if (!signalTypes[type].type == type)
-        return 0;
-
+Signal* sgm_signal_new(SignalType type, SignalPayload data) {
     Signal *signal = (Signal*)malloc(sizeof(Signal));
     signal->ctrl.ref_cnt = 0;
     g_mutex_init (&signal->ctrl.mutex);
@@ -76,15 +57,11 @@ void sgm_signal_unref(Signal* signal) {
     }
 }
 
-int sgm_signal_length(Signal* signal) {
-    return signalTypes[signal->type].length(signal);
-}
-
 SignalType sgm_signal_type(Signal* signal) {
     return signal->type;
 }
 
-void *sgm_signal_data(Signal* signal) {
+SignalPayload sgm_signal_data(Signal* signal) {
     return signal->data;
 }
 

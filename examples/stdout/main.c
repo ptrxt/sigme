@@ -25,7 +25,6 @@
 
 #define G_SOURCE_FUNC(f) ((GSourceFunc) (void (*)(void)) (f))
 
-void install_signals(void);
 
 static gboolean timer_callback(void* data) {
     sgm_run();
@@ -46,7 +45,6 @@ int main(void) {
     // Create timeout for executing signal manager periodically
     setup_timer(context);
 
-    install_signals();
     sgm_add_source(humid_init());
     sgm_add_receiver(stdout_broadcaster_init(&t));
 

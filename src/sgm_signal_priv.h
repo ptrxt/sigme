@@ -18,4 +18,16 @@
 void sgm_signal_ref(Signal* signal);
 uint32_t sgm_signal_refcount(Signal* signal);
 
+/**
+ * Create new signal
+ *
+ * Signal sources calls this function to create a new signal.
+ * Uses dynamic memory allocation.
+ *
+ * @param type, signal type to create
+ * @param data, the dynamically allocated payload to be attached to the signal
+ * @return pointer to dynamically allocated signal
+ */
+Signal* sgm_signal_new(SignalType type, SignalPayload data);
+
 #endif /* _SGM_SIGNAL_PRIV_H_ */

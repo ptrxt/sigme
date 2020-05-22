@@ -19,7 +19,7 @@ typedef struct {
      *
      * @return Pointer to new signal or NULL if no signal to be delivered
      */
-    Signal* (*poll)(void);
+    void (*poll)(SignalType* type, SignalPayload* data);
 } SignalSource;
 
 #endif /* _SGM_SOURCE_H_ */

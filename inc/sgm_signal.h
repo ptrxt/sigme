@@ -9,19 +9,9 @@
 
 typedef struct Signal_t Signal;
 typedef enum ESignalsTypes SignalType;
+typedef void* SignalPayload;
 
 
-/**
- * Create new signal
- *
- * Signal sources calls this function to create a new signal.
- * Uses dynamic memory allocation.
- *
- * @param type, signal type to create
- * @param data, the dynamically allocated payload to be attached to the signal
- * @return pointer to dynamically allocated signal
- */
-Signal* sgm_signal_new(SignalType type, void* data);
 
 /**
  * Lock signal mutex
@@ -58,11 +48,6 @@ void sgm_signal_unlock(Signal* signal);
 void sgm_signal_unref(Signal* signal);
 
 /**
- * Get length of attached payload
- */
-int sgm_signal_length(Signal* signal);
-
-/**
  * Get signal type of attached payload
  */
 SignalType sgm_signal_type(Signal* signal);
@@ -70,7 +55,7 @@ SignalType sgm_signal_type(Signal* signal);
 /**
  * Get signal payload
  */
-void *sgm_signal_data(Signal* signal);
+SignalPayload sgm_signal_data(Signal* signal);
 
 
 

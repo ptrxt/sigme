@@ -1,6 +1,7 @@
 #include "sgm.h"
 #include "sgm_signal.h"
 #include "sgm_signal_priv.h"
+#include "signal_definitions.h"
 #include <glib.h>
 #include <stdio.h>
 #include <time.h>
@@ -49,8 +50,12 @@ static void send_to_receivers(Signal* signal) {
 
 static void pollSources(void) {
     for (int i = 0; i<MAX_N_SOURCES && manager.sources[i] != 0; i++) {
-        Signal *signal = manager.sources[i]->poll();
-        if (NULL != signal) {
+        SignalType type;
+        SignalPayload data = NULL;
+        manager.sources[i]->poll(&type, &data);
+        if (data != NULL) {
+            Signal *signal = sgm_signal_new(type, data);
+
             time_t t;
             time(&t);
             printf("---------------------------\n%ssignal manager:\t\treceive signal type %d ..\n",ctime(&t), sgm_signal_type(signal));

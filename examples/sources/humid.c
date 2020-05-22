@@ -17,12 +17,21 @@ static uint32_t humidSensorId(void) {
     return 0;
 }
 
-static Signal* fetchHumidity() {
+//static Signal* fetchHumidity() {
+//    HumiditySignal* h = (HumiditySignal*)malloc(sizeof(HumiditySignal));
+//    h->humidity = humidSensorRead();
+//    h->id = humidSensorId();
+//    printf("new signal humidity\n");
+//    return sgm_signal_new(kHumiditySignal, h);
+//}
+
+static void fetchHumidity(SignalType *type, void** data) {
     HumiditySignal* h = (HumiditySignal*)malloc(sizeof(HumiditySignal));
     h->humidity = humidSensorRead();
     h->id = humidSensorId();
     printf("new signal humidity\n");
-    return sgm_signal_new(kHumiditySignal, h);
+    *type = kHumiditySignal;
+    *data = (void*)h;
 }
 
 SignalSource *humid_init(void) {
