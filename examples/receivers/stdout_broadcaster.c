@@ -32,7 +32,7 @@ static gpointer printThread(gpointer data) {
 
     while(1) {
         Signal* signal = (Signal*)g_async_queue_pop(receiver->queue);
-        sgm_signal_lock(signal);
+        sgm_signal_process(signal);
         switch (sgm_signal_type(signal)) {
             case kTempSignal:
                 printf("stdout_broadcaster:\treceived %s\n", (char*)sgm_signal_data(signal));
@@ -47,7 +47,7 @@ static gpointer printThread(gpointer data) {
                 break;
         }
 
-        sgm_signal_unref(signal);
+        sgm_signal_complete(signal);
     }
 
     return 0;

@@ -16,6 +16,18 @@ struct Signal_t {
     SignalPayload data;
 };
 
+void sgm_signal_process(Signal* signal) {
+    sgm_signal_lock(signal);
+}
+
+void sgm_signal_complete_later(Signal* signal) {
+    sgm_signal_unlock(signal);
+}
+
+void sgm_signal_complete(Signal* signal) {
+    sgm_signal_unref(signal);
+}
+
 Signal* sgm_signal_new(SignalType type, SignalPayload data) {
     Signal *signal = (Signal*)malloc(sizeof(Signal));
     signal->ctrl.ref_cnt = 0;

@@ -16,6 +16,7 @@
  * @param signal
  */
 void sgm_signal_ref(Signal* signal);
+void sgm_signal_unref(Signal* signal);
 uint32_t sgm_signal_refcount(Signal* signal);
 
 /**
@@ -29,5 +30,6 @@ uint32_t sgm_signal_refcount(Signal* signal);
  * @return pointer to dynamically allocated signal
  */
 Signal* sgm_signal_new(SignalType type, SignalPayload data);
-
+void sgm_signal_lock(Signal* signal);
+void sgm_signal_unlock(Signal* signal);
 #endif /* _SGM_SIGNAL_PRIV_H_ */
