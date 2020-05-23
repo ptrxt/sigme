@@ -71,7 +71,6 @@ static SignalReceiver receiver;
 
 SignalReceiver* temp_receiver_init(void) {
     receiver.get_signal_types = getSignals;
-    receiver.name = name;
     receiver.receive = receive;
     return &receiver;
 }
@@ -87,10 +86,6 @@ static void getSignals(SignalType signals[], unsigned max, unsigned *len) {
     *len = 1;
 }
 
-static const char* name(void) {
-    return "dbus_temp_sender";
-}
-
 static ReceiveReturn receive(Signal* signal) {
     // Fetch the payload and cast it to a TempSignal
     TempSignal *t = (TempSignal*)(sgm_signal_payload(signal));
@@ -101,3 +96,5 @@ static ReceiveReturn receive(Signal* signal) {
     // We are done with this signal
     return PROCESSING_DONE;
 }
+```
+Note how the receive function returns the value PROCESSING_DONE. This indicates that the receiver has done its signal processing and the sigme framework can de-allocate signal memory if no other receivers needs it. If instead the receiver had pushed the signal pointer to a queue for later processing in another thread, it must return PROCESSING_PENDING. 
