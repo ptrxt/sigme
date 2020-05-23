@@ -28,9 +28,10 @@ typedef struct {
 } TempSignal;
 ```
 The enum values are used in calls to functions that takes a SignalType argument, and is used by the signal receiver to decode which signal type is sent. The last value in the enum, must be named kMaxSigType.
+The signal definition struct can of course be placed in another header file.
 
 ### Signal source
-Next thing to do is to implement a signal source that creates temperature signals. Signal sources implements the SignalSource interface which consists of one function: poll(). 
+Next thing to do is to implement a signal source that publishes temperature signals. Signal sources implements the SignalSource interface which consists of one function: poll(). 
 
 ```
 temp_source.c:
@@ -39,7 +40,7 @@ temp_source.c:
 #include "sgm_signal.h"
 #include <stdlib.h>
 
-// The SignalSource instance
+// Every signal source should declare a SignalSource instance
 static SignalSource source;
 
 SignalSource* temp_source_init(void) {
