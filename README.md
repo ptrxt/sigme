@@ -60,5 +60,8 @@ void poll(SignalType *type, SignalPayload *data) {
     *data = (SignalPayload)temp;
 }
 ```
+The signal source shall use dynamic memory allocation when creating the signal. The allocated memory will be freed by sigme when all receivers are done with it.
+Note that the signal source can only deliver one signal in each poll() call. Also note that the source can create different signal types, it is not fixed to only one as in the example. You could for instance arrange to alternate two signal types every second call.
+
 ### Signal receiver
 The signal sent from the source wil be delivered to receivers registered for that signal type. Signal receivers implements the SignalReceiver interface, which consists of two functions: get_signal_types() and receive().
