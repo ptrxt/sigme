@@ -7,14 +7,14 @@ sigme requires GLib: https://developer.gnome.org/about/
 When compiling, link to the following libs: pthread, gthread-2.0, gio-2.0, gobject-2.0, glib-2.0.
 
 ## Quick tutorial
-To give a quick introduction on how to use sigme, we will guide you through an example application that reads temperature values from file and writes them to stdout. Steps covered are:
+To give a quick introduction on how to use sigme, we will guide you through an example application that reads temperature value from a fake sensor and writes it to stdout. Steps covered are:
  * Signal definition
  * Signal source
  * Signal receiver
  * Main loop
 
 ### Signal definition
-First we create the mandatory headerfile *signal_definitions.h* in which we define the enum ESignalTypes and a struct for use as a temperature signal:
+First we create the mandatory header file *signal_definitions.h* in which we define the enum ESignalTypes and a struct for use as a temperature signal:
 ```
 signal_definitions.h:
 
