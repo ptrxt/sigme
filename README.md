@@ -14,7 +14,7 @@ To give a quick introduction on how to use sigme, we will guide you through an e
  * Main loop
 
 ### Signal definition
-First we create the mandatory headerfile signal_definitions.h in which we define the enum ESignalTypes and also defines a struct for use as a temperature signal:
+First we create the mandatory headerfile *signal_definitions.h* in which we define the enum ESignalTypes and also defines a struct for use as a temperature signal:
 ```
 signal_definitions.h:
 
