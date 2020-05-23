@@ -44,10 +44,6 @@ typedef struct {
      */
     void (*get_signal_types)(SignalType signals[], unsigned max, unsigned *len);
 
-    /**
-     * Get the name of the receiver
-     */
-    const char* (*name)(void);
 } SignalReceiver;
 
 

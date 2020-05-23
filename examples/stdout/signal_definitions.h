@@ -1,7 +1,7 @@
 #ifndef _SIGNAL_DEFINITIONS_H_
 #define _SIGNAL_DEFINITIONS_H_
 
-enum ESignalsTypes {
+enum ESignalTypes {
     kTempSignal,
     kHumiditySignal,
     kMaxSigType

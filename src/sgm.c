@@ -39,7 +39,7 @@ static void init() {
 static void send_to_receivers(Signal* signal) {
     SignalReceiver **receiver = &manager.sigTypeToReceiver[sgm_signal_type(signal)][0];
     for (int j = 0; j < MAX_N_RECEIVERS && *receiver != 0; j++, receiver++) {
-        printf("signal manager:\t\tforward to %s\n", (*receiver)->name());
+        printf("signal manager:\t\tforward to receiver\n");
 
         ReceiveReturn result = (*receiver)->receive(signal);
         if (result == PROCESSING_PENDING) {
@@ -90,7 +90,7 @@ void sgm_add_receiver(SignalReceiver *receiver) {
         for (int j = 0; j<MAX_N_RECEIVERS; j++) {
             if (manager.sigTypeToReceiver[type][j] == 0) {
                 manager.sigTypeToReceiver[type][j] = receiver;
-                printf("%s registered as receiver of signal type: %d\n", receiver->name(), type);
+                printf("registered as receiver of signal type: %d\n", type);
                 break;
             }
         }

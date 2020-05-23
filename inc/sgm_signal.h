@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 typedef struct Signal_t Signal;
-typedef enum ESignalsTypes SignalType;
+typedef enum ESignalTypes SignalType;
 typedef void* SignalPayload;
 
 
@@ -63,7 +63,7 @@ SignalType sgm_signal_type(Signal* signal);
 /**
  * Get signal payload
  */
-SignalPayload sgm_signal_data(Signal* signal);
+SignalPayload sgm_signal_payload(Signal* signal);
 
 
 

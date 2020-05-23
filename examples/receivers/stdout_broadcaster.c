@@ -23,10 +23,6 @@ static void get_signals(SignalType signals[], unsigned max, unsigned *len) {
     *len = 2;
 }
 
-static const char* get_name(void) {
-    return "stdout broadcaster";
-}
-
 static gpointer printThread(gpointer data) {
     StdoutBroadcaster *receiver = data;
 
@@ -35,11 +31,11 @@ static gpointer printThread(gpointer data) {
         sgm_signal_process(signal);
         switch (sgm_signal_type(signal)) {
             case kTempSignal:
-                printf("stdout_broadcaster:\treceived %s\n", (char*)sgm_signal_data(signal));
+                printf("stdout_broadcaster:\treceived %s\n", (char*)sgm_signal_payload(signal));
                 break;
 
             case kHumiditySignal:
-                printf("stdout_broadcaster:\treceived %d\n", *(uint32_t*)sgm_signal_data(signal));
+                printf("stdout_broadcaster:\treceived %d\n", *(uint32_t*)sgm_signal_payload(signal));
                 break;
 
             default:
@@ -56,7 +52,6 @@ static gpointer printThread(gpointer data) {
 SignalReceiver* stdout_broadcaster_init(GThread **thread) {
     receiver.receiver.receive = pushSignal;
     receiver.receiver.get_signal_types = get_signals;
-    receiver.receiver.name = get_name;
     receiver.queue = g_async_queue_new();
     GThread* t = g_thread_new("printThread", printThread, &receiver);
     *thread = t;

@@ -73,7 +73,7 @@ SignalType sgm_signal_type(Signal* signal) {
     return signal->type;
 }
 
-SignalPayload sgm_signal_data(Signal* signal) {
+SignalPayload sgm_signal_payload(Signal* signal) {
     return signal->data;
 }
 
