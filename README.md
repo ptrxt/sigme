@@ -27,7 +27,7 @@ typedef struct {
     int temp;
 } TempSignal;
 ```
-The ESignalTypes enum, must contain the kMaxSigType as it last value.
+The enum values are used in calls to functions that takes a SignalType argument, and is used by the signal receiver to decode which signal type is sent. The last value in the enum, must be named kMaxSigType.
 
 ### Signal source
 Next thing to do is to implement a signal source that creates temperature signals. Signal sources implements the SignalSource interface which consists of one function: poll(). 
