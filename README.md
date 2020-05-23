@@ -65,3 +65,39 @@ Note that the signal source can only deliver one signal in each poll() call. Als
 
 ### Signal receiver
 The signal sent from the source wil be delivered to receivers registered for that signal type. Signal receivers implements the SignalReceiver interface, which consists of two functions: get_signal_types() and receive().
+```
+// Every signal receiver shall declare a SignalReceiver instance.
+static SignalReceiver receiver;
+
+SignalReceiver* temp_receiver_init(void) {
+    receiver.get_signal_types = getSignals;
+    receiver.name = name;
+    receiver.receive = receive;
+    return &receiver;
+}
+
+// Called by framework to fetch the signal types this receiver wants
+// to subscribe on
+static void getSignals(SignalType signals[], unsigned max, unsigned *len) {
+
+    // Fill the signals array with the signal types we are interested in
+    signals[0] = kTempSignal;
+    
+    // indicate how many we filled in
+    *len = 1;
+}
+
+static const char* name(void) {
+    return "dbus_temp_sender";
+}
+
+static ReceiveReturn receive(Signal* signal) {
+    // Fetch the payload and cast it to a TempSignal
+    TempSignal *t = (TempSignal*)(sgm_signal_payload(signal));
+    
+    // write it to stdout
+    printf("temp receiver received %d\n", t->temp);
+    
+    // We are done with this signal
+    return PROCESSING_DONE;
+}
