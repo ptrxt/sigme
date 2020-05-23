@@ -87,14 +87,64 @@ static void getSignals(SignalType signals[], unsigned max, unsigned *len) {
 }
 
 static ReceiveReturn receive(Signal* signal) {
-    // Fetch the payload and cast it to a TempSignal
-    TempSignal *t = (TempSignal*)(sgm_signal_payload(signal));
+    // Check if correct signal type
+    if (kTempSignal == sgm_signal_type(signal)) {
     
-    // write it to stdout
-    printf("temp receiver received %d\n", t->temp);
+        // Fetch the payload and cast it to a TempSignal
+        TempSignal *t = (TempSignal*)(sgm_signal_payload(signal));
+    
+        // write it to stdout
+        printf("temp receiver received %d\n", t->temp);
+    }
+    else {
+        printf("received unexpected type\n");
+    }
     
     // We are done with this signal
     return PROCESSING_DONE;
 }
 ```
-Note how the receive function returns the value PROCESSING_DONE. This indicates that the receiver has done its signal processing and the sigme framework can de-allocate signal memory if no other receivers needs it. If instead the receiver had pushed the signal pointer to a queue for later processing in another thread, it must return PROCESSING_PENDING. 
+Notice how the receive function returns the value PROCESSING_DONE. This indicates that the receiver is done with its signal processing and the sigme framework can de-allocate signal memory if no other receivers needs it. If instead the receiver had for instance, pushed the signal pointer to a queue for later processing, it must return PROCESSING_PENDING. 
+The example below shows how the code would be changed to use later signal processing by another thread pulling from a queue:
+```
+static ReceiveReturn receive(Signal* signal) {
+    // push the signal to the queue for asynchronous processing in another thread
+    g_async_queue_push(queue, signal);
+    
+    // pending indicates to framework that it shall not de-allocate the signal
+    return PROCESSING_PENDING;
+}
+
+// Thread function reading from queue
+static gpointer printThread(gpointer data) {
+    // the queue was passed to the function in the data argument
+    GAsyncQueue *q = data;
+
+    while(1) {
+        Signal* signal = (Signal*)g_async_queue_pop(q);
+        
+        // A signal pointer was popped from queue, wait for lock to start processing it
+        sgm_signal_process(signal);
+        
+        switch (sgm_signal_type(signal)) {
+            case kTempSignal: {
+                    TempSignal *temp = (TempSignal*)sgm_signal_payload(signal);
+                    printf("stdout_broadcaster:\treceived %d\n", temp->temp);
+                    break;
+            }
+
+            default:
+                printf("stdout_broadcaster:\treceived unknown signal\n");
+                break;
+        }
+
+        // We are done with this signal
+        sgm_signal_complete(signal);
+    }
+
+    return 0;
+}
+```
+In case of asynchronus signal processing, the thread must call *sgm_signal_process(signal)* to aquire a lock for the signal. This is a blocking call. And to release the lock, the receiver calls *sgm_signal_complete()* to indicate that the signal can be de-allocated.
+If the receiver is partially done with processing and will continue later, it shall instead call *sgm_signal_complete_later()*
+
