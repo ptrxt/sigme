@@ -17,7 +17,9 @@ typedef struct {
     /**
      * Poll source for new signal
      *
-     * @return Pointer to new signal or NULL if no signal to be delivered
+     * @param[out] type, should be set to a value from the ESignalTypes enum
+     *             indicating which signal type to be sent
+     * @param[out] data, pointer to the signal payload
      */
     void (*poll)(SignalType* type, SignalPayload* data);
 } SignalSource;
