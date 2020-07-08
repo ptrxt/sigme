@@ -41,7 +41,7 @@ static void send_to_receivers(Signal* signal) {
     for (int j = 0; j < MAX_N_RECEIVERS && *receiver != 0; j++, receiver++) {
         printf("signal manager:\t\tforward to receiver\n");
 
-        ReceiveReturn result = (*receiver)->receive(signal);
+        ReceiveReturn result = (*receiver)->receive(signal, (*receiver)->context);
         if (result == PROCESSING_PENDING) {
             sgm_signal_ref(signal);
         }
@@ -85,6 +85,12 @@ void sgm_add_receiver(SignalReceiver *receiver) {
     }
     SignalType requested[kMaxSigType];
     unsigned n_signals = 0;
+
+    if (!receiver->get_signal_types) {
+        printf("Error: receiver has not set get_signal_types pointer!\n");
+        exit(1);
+    }
+
     receiver->get_signal_types(requested, kMaxSigType, &n_signals);
     for (int type = 0; type < n_signals; type++) {
         for (int j = 0; j<MAX_N_RECEIVERS; j++) {

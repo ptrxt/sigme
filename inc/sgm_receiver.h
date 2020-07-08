@@ -24,13 +24,13 @@ typedef struct {
      * Executed in the context of signal manager and the signal is locked
      * by that thread. So if the receive function places the signal in a
      * queue to be handled by another thread, that thread must acquire the lock
-     * by calling signal_lock() before processing the signal to be sure signal
+     * by calling sgm_signal_process before processing the signal to be sure signal
      * manager thread has released the signal.
      *
      * @return PROCESSING_DONE if signal processing was done in the receive call
      * @return PROCESSING_PENDING is signal processing is deferred to be done later
      */
-    ReceiveReturn (*receive)(Signal* signal);
+    ReceiveReturn (*receive)(Signal* signal, void* context);
 
     /**
      * Request signals to be subscribed
@@ -43,6 +43,8 @@ typedef struct {
      * @param len, should be set to the number of types added to the array
      */
     void (*get_signal_types)(SignalType signals[], unsigned max, unsigned *len);
+
+    void* context;
 
 } SignalReceiver;
 
